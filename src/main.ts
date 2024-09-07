@@ -1,4 +1,6 @@
+import { mine } from "roles/mine";
 import { ErrorMapper } from "utils/ErrorMapper";
+import { getSpawn } from "utils/utils";
 
 declare global {
   /*
@@ -29,10 +31,52 @@ declare global {
   }
 }
 
+const debugLog = (msg: string) => {
+  console.log(`DEBUG: ${msg}`);
+};
+
+
+const getCreepName = () => {
+  const randomId = Math.random().toString(36).slice(-6);
+  return `creep-${randomId}`;
+};
+
+const spawnCreep = (spawn: StructureSpawn) => {
+  const spawnStatus = spawn.spawnCreep([WORK, MOVE, CARRY], getCreepName());
+  console.log(`spawnStatus: ${spawnStatus}`);
+};
+
+// @ts-ignore
+module.exports.loop = () => {
+  const CREEP_LIMIT = 3;
+  const primarySpawn = getSpawn();
+  if (Object.keys(Game.creeps).length < CREEP_LIMIT) {
+    debugLog("should spawn creep");
+    spawnCreep(primarySpawn);
+  }
+  if (primarySpawn.store.getFreeCapacity(RESOURCE_ENERGY) > 0) {
+    debugLog("should mine");
+    mine();
+  } else {
+    debugLog("should debug");
+  }
+};
 // When compiling TS to JS and bundling with rollup, the line numbers and file names in error messages change
 // This utility uses source maps to get the line numbers and file names of the original, TS source code
 export const loop = ErrorMapper.wrapLoop(() => {
   console.log(`Current game tick is ${Game.time}`);
+  const CREEP_LIMIT = 3;
+  const primarySpawn = getSpawn();
+  if (Object.keys(Game.creeps).length < CREEP_LIMIT) {
+    debugLog("should spawn creep");
+    spawnCreep(primarySpawn);
+  }
+  if (primarySpawn.store.getFreeCapacity(RESOURCE_ENERGY) > 0) {
+    debugLog("should mine");
+    mine();
+  } else {
+    debugLog("should debug");
+  }
 
   // Automatically delete memory of missing creeps
   for (const name in Memory.creeps) {
