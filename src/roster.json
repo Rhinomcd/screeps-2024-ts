@@ -1,0 +1,6 @@
+{
+	"creepLimits": {
+		"worker": 1,
+		"harvester": 1
+	}
+}

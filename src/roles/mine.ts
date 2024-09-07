@@ -14,14 +14,11 @@ export const mine = () => {
       break;
     }
 
-    // @ts-ignore
     if (creep.memory.assignedSource === undefined) {
-      // @ts-ignore
       creep.memory.assignedSource =
         creep.pos.findClosestByRange(FIND_SOURCES)?.id;
     }
 
-    // @ts-ignore
     const energySource = Game.getObjectById(creep.memory.assignedSource) as Source;
     const harvestPosition = energySource.pos;
     creep.say("⛏️")
