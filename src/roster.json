@@ -1,6 +1,7 @@
 {
 	"creepLimits": {
-		"worker": 5,
-		"harvester": 1
+		"worker": 4,
+		"miner": 2,
+    "upgrader": 3
 	}
 }

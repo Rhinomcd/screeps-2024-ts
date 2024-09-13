@@ -1,13 +1,6 @@
-import { debugLog, Job, Role } from "main";
-import { getSpawn } from "utils/utils";
+import { Job, Role } from "main";
+import { debugLog } from "utils/utils";
 
-const dumpEnergyAtSpawn = (creep: Creep) => {
-  const primarySpawn = getSpawn();
-  if (creep.transfer(primarySpawn, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
-    creep.say("➡️");
-    creep.moveTo(primarySpawn.pos);
-  }
-};
 
 const harvestEnergy = (creep: Creep) => {
   debugLog(`${creep.name} - should be harvestingEnergy`)
@@ -40,18 +33,8 @@ const creepShouldMine = (creep: Creep) => {
 export const mine = () => {
   for (const key of Object.keys(Game.creeps)) {
     const creep = Game.creeps[key];
-    if (creep.memory.role === Role.WORKER) {
-      creep.memory.assignment = Job.MINE;
-    }
     if (!creepShouldMine(creep)) {
-      debugLog(`${creep.name} - should be breaking `)
-      break;
-    }
-
-    if (creep.store.getFreeCapacity(RESOURCE_ENERGY) === 0) {
-      debugLog(`${creep.name} - should be dumping energy`)
-      dumpEnergyAtSpawn(creep);
-      break;
+      continue;
     }
 
     harvestEnergy(creep);
